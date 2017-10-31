@@ -59,9 +59,17 @@
 		<dotml:node id='{@name}' style="solid" shape="{$shape}" label='{@name}' fillcolor='{$focus-bgcolor}' color="{$focus-color}" />
 	</xsl:template>
 	
+	<xsl:template match='error'>
+		<dotml:node id='{@id}' style="solid" shape="box" label='{@msg}' fillcolor='white' color="red" fontcolor='red'/>
+	</xsl:template>
+	
 	<xsl:template match='cluster' mode='link'>
 		<xsl:for-each select='link'>
 			<dotml:edge from="{@from}" to="{@to}" color='{$other-color}' />
+		</xsl:for-each>
+		
+		<xsl:for-each select='error'>
+			<dotml:edge from="{@from}" to="{@id}" color='red' />
 		</xsl:for-each>
 	</xsl:template>
 	

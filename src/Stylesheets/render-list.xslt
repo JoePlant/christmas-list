@@ -2,9 +2,8 @@
 <xsl:stylesheet version="1.0" 
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
 
-	<xsl:param name="links-file">..\links.xml</xsl:param>
-
 	<xsl:output method="xml" indent="yes" />
+	<xsl:param name="links-file">..\links.xml</xsl:param>
 	
 	<xsl:key name='people-by-name' match='Family/*' use='@name'/>
 	
@@ -38,12 +37,13 @@ People:
 			</xsl:for-each>
 			<xsl:for-each select='Adult|Child'>
 				<xsl:variable name='from' select='@name'/>
-				<xsl:for-each select='BuysFor/*'>
+	
+				<xsl:for-each select='BuysFor[@name] | BuysFor/*[@name]'>
 					<xsl:variable name='lookup' select="key('people-by-name', @name)"/>
 					<xsl:variable name='error'>
 						<xsl:choose>
 							<xsl:when test='count($lookup) = 0'>
-								<xsl:value-of select="concat('Name: ', @name, 'not found.')"/>
+								<xsl:value-of select="concat('', @name, ' not found.')"/>
 							</xsl:when>
 							<xsl:when test='count($lookup) = 1'/>
 							<xsl:otherwise>
@@ -61,6 +61,7 @@ People:
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:comment><xsl:value-of select='$error'/></xsl:comment>
+							<error id='{generate-id()}' from='{$from}' msg='{$error}'/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:for-each>

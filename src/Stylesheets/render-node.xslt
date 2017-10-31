@@ -35,6 +35,8 @@
 	<xsl:template match='cluster'>
 		<xsl:apply-templates select='node[@type="Adult"]'/>
 		<xsl:apply-templates select='node[@type="Child"]'/>
+		<xsl:apply-templates select='error[@msg]'/>
+		
 		<xsl:if test="count(node[@type='Adult'])>1">
 			<xsl:variable name="a1" select="node[@type='Adult'][1]/@name"/>
 			<xsl:variable name="a2" select="node[@type='Adult'][2]/@name"/>
@@ -62,12 +64,20 @@
 				<xsl:otherwise>oval</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<dotml:node id='{@name}' style="solid" shape="{$shape}" label='{@name}' fillcolor='{$focus-bgcolor}' color="{$focus-color}" />
+		<dotml:node id='{@name}' style="solid" shape="{$shape}" label='{@name}' fillcolor='{$focus-bgcolor}' color="{$focus-color}" fontname="{$fontname}" fontcolor="{$focus-color}" fontsize="{$font-size-h2}"/>
+	</xsl:template>
+	
+	<xsl:template match='error'>
+		<dotml:node id='{@id}' style="solid" shape="box" label='{@msg}' fillcolor='white' color="red" fontcolor='red'/>
 	</xsl:template>
 	
 	<xsl:template match='cluster' mode='link'>
 		<xsl:for-each select='link'>
 			<dotml:edge from="{@from}" to="{@to}" color='{$other-color}' />
+		</xsl:for-each>
+		
+		<xsl:for-each select='error'>
+			<dotml:edge from="{@from}" to="{@id}" color='red' />
 		</xsl:for-each>
 	</xsl:template>
 	
