@@ -73,7 +73,7 @@
 	
 	<xsl:template match='cluster' mode='link'>
 		<xsl:for-each select='link'>
-			<dotml:edge from="{@from}" to="{@to}" color='{$other-color}' />
+			<dotml:edge from="{@from}" to="{@to}" color='darkgreen' />
 		</xsl:for-each>
 		
 		<xsl:for-each select='error'>
